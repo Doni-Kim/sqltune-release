@@ -166,6 +166,9 @@ zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 `sqltune.json` 이 
 업무든 개인이든 자유롭게 쓰셔도 됩니다. 실행 파일 재배포와 리버스 엔지니어링은 삼가 주세요.
 소스는 공개하지 않습니다.
 
+sqltune 에는 Microsoft 구성 요소(SQL Server 통신 라이브러리 Microsoft.Data.SqlClient.SNI 등)를 비롯한 외부 구성 요소가 들어 있고,
+각각은 [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt)(zip 안에도 있음)에 전문이 실린 자기 라이선스 조건을 따릅니다. sqltune 을 쓰시면 그 조건에도 동의하시는 것으로 봅니다.
+
 ## 연락처
 
 DBMS Works — **doniikim@gmail.com**

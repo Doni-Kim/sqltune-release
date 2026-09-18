@@ -181,6 +181,10 @@ connection dialog fill it in:
 Free to use, at work or at home. Please do not redistribute the binary or reverse-engineer it.
 The source is not published.
 
+sqltune bundles third-party components, including Microsoft components (such as the SQL Server network library
+Microsoft.Data.SqlClient.SNI). Each is provided under its own license terms, reproduced in full in
+[THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) (also inside the zip); by using sqltune you also accept those terms.
+
 ## Contact
 
 DBMS Works — **doniikim@gmail.com**
