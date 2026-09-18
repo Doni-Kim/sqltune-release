@@ -47,6 +47,8 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 - **Live dashboard** — buffer cache hit ratio, SQL Server CPU, PLE, memory, tempdb, batches / transactions /
   recompiles / full scans / lock waits per second, disk throughput, top waits, trend graphs, and the session list.
   Rates always cover the last sample, not the time since the server started.
+  SQL Server CPU is a share of the CPUs SQL Server may use: when affinity or an edition limit gives it only some of the
+  host's CPUs (say 4 of 8), 100% means all of those are busy, and the gauge also shows "4 of 8 CPUs" and the share of the whole host.
 - **Lock chains that find the real root** — including sessions that left a transaction open and went idle
   (`idle-tx`), the usual root blocker that request-only views miss. `F5` shows blockers together with the
   sessions they block.
@@ -63,7 +65,7 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 - **Health Check** (`G`) — 10 categories (server configuration, performance, database settings, indexes,
   statistics, tempdb, files, backups, Agent jobs, log) with a score, a grade and what to fix first; Excel export.
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.
-- **Alerts** — 12 rules: CPU, lock chains, blocked requests, idle in transaction, long requests, buffer cache hit,
+- **Alerts** — 12 rules: CPU (of the CPUs SQL Server may use), lock chains, blocked requests, idle in transaction, long requests, buffer cache hit,
   page life expectancy, memory grants pending, tempdb usage, disk read / write latency, deadlocks —
   with your own thresholds.
 - **History** — press `L` to log every sample into a local SQLite file, then `H` to look back.

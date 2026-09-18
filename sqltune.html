@@ -224,7 +224,10 @@
         <tr><td><strong>상단 바</strong></td><td>버전 · 서버 · SQL Server 버전 · 지금 DB · 시각. <span class="kbd">F2</span>~<span class="kbd">F5</span>로 All / Running / Waiting / Blocking 세션만 추리고, 오른쪽에서 테마를 고릅니다.</td></tr>
         <tr><td><strong>알림 줄</strong></td><td>임계값을 넘긴 항목이 있으면 노랑(주의)·빨강(위험)으로 뜹니다. 누르거나 <span class="kbd">N</span>으로 자세히 봅니다.</td></tr>
         <tr><td><strong>Buffer Cache Hit</strong></td><td>페이지 요청 중 메모리에서 바로 찾은 비율.</td></tr>
-        <tr><td><strong>CPU</strong></td><td>SQL Server가 쓰는 CPU(호스트 전체 대비). 매 주기 리소스 풀 카운터로 갱신하고, 아래 작은 글씨는 스케줄러 링 버퍼의 1분 평균과 SQL Server 밖 CPU(other)입니다.</td></tr>
+        <tr><td><strong>CPU</strong></td><td>SQL Server가 쓰는 CPU — <strong>SQL Server가 쓸 수 있는 CPU 대비</strong>입니다. 매 주기 리소스 풀 카운터(모든 풀의 합)로 갱신합니다.
+            affinity나 에디션의 코어 제한으로 호스트 CPU 일부만 받은 서버(예: 8개 중 4개)에서는 <strong>받은 CPU를 다 쓰면 100%</strong>이고,
+            아래 작은 글씨 맨 앞에 <code>4 of 8 CPUs · host 50%</code>처럼 받은 개수와 호스트 전체 대비 값을 함께 보여 줍니다.
+            이어서 스케줄러 링 버퍼의 1분 평균(같은 기준)과 SQL Server 밖 CPU(<em>other</em>, 호스트 대비)가 나옵니다. OS 전체 CPU는 대략 SQL Server(호스트 대비) + other 입니다.</td></tr>
         <tr><td><strong>Trend</strong></td><td>Batch/s · CPU · Active · Waiting의 최근 흐름. 메모리에만 있으므로 오래 남기려면 <span class="kbd">L</span>로 로깅합니다.</td></tr>
         <tr><td><strong>Sessions</strong></td><td>상태별 세션 수 — Running · Runnable · Waiting · Blocked · IdleInTx · Sleep.</td></tr>
         <tr><td><strong>Performance</strong></td><td>Buffer Hit · PLE · 메모리 · TempDB 사용량 · Batch/s · Trans/s · Recompile/s · FullScan/s · LockWait/s · Deadlocks · 디스크 읽기/쓰기. 초당 값은 <strong>직전 주기 구간</strong> 값입니다(서버 시작 이후 누적이 아님).</td></tr>
@@ -451,7 +454,7 @@
 
     <table>
         <tr><th>항목</th><th>무엇을 보나</th><th style="width:170px">기본 주의 / 위험</th></tr>
-        <tr><td>CPU</td><td>SQL Server가 쓰는 CPU (호스트 전체 대비)</td><td>80% / 95%</td></tr>
+        <tr><td>CPU</td><td>SQL Server가 쓰는 CPU (SQL Server가 쓸 수 있는 CPU 대비 — 8개 중 4개를 받은 서버도 그 4개가 차면 울림)</td><td>80% / 95%</td></tr>
         <tr><td>Lock chain</td><td>한 세션이 남을 오래 막고 있음 (막힌 수는 간접까지)</td><td>30초 / 120초</td></tr>
         <tr><td>Blocked requests</td><td>막힌 요청 수</td><td>5 / 20</td></tr>
         <tr><td>Idle in transaction</td><td>트랜잭션을 연 채 쉬는 세션 중 가장 오래된 것</td><td>300초 / 1800초</td></tr>
