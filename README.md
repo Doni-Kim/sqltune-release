@@ -116,6 +116,7 @@ GRANT EXECUTE ON dbo.agent_datetime TO sqltune;
   Everything else works without it.
 - Without `VIEW ANY DEFINITION` the Disk panel shows no files or volumes.
 - `SQLAgentReaderRole` is not enough for the Agent check — it covers the Agent procedures, not the job tables.
+- When a grant is missing, sqltune says which one on the panel instead of showing an empty list.
 
 ## Blank window? (WebView2)
 

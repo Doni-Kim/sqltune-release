@@ -105,6 +105,7 @@ GRANT EXECUTE ON dbo.agent_datetime TO sqltune;
   Statistics 팝업과 Health Check 의 통계 범주가 비어 보입니다. 나머지는 없어도 됩니다.
 - `VIEW ANY DEFINITION` 이 없으면 Disk 팝업에 파일 · 볼륨이 나오지 않습니다.
 - Agent 점검에는 `SQLAgentReaderRole` 로는 부족합니다 — 그 역할은 Agent 프로시저용이고 작업 테이블을 직접 읽지는 못합니다.
+- 권한이 모자라면 빈 목록 대신 어떤 권한이 필요한지 팝업에 적어 줍니다.
 
 ## 화면이 안 뜬다면 (WebView2)
 
