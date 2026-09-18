@@ -44,8 +44,8 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 
 ## What it does
 
-- **Live dashboard** — buffer cache hit ratio, SQL Server CPU, PLE, memory, tempdb, batches / transactions /
-  recompiles / full scans / lock waits per second, disk throughput, top waits, trend graphs, and the session list.
+- **Live dashboard** — buffer cache hit ratio, SQL Server CPU, PLE, memory, memory grants pending, tempdb, batches / transactions /
+  compiles / recompiles / page splits / full scans / lock waits per second, disk throughput and latency, top waits, trend graphs, and the session list.
   Rates always cover the last sample, not the time since the server started.
   SQL Server CPU is a share of the CPUs SQL Server may use: when affinity or an edition limit gives it only some of the
   host's CPUs (say 4 of 8), 100% means all of those are busy, and the gauge also shows "4 of 8 CPUs" and the share of the whole host.
