@@ -19,9 +19,9 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 |---|---|
 | ![대시보드](screenshots/dashboard.jpg) | ![Top SQL](screenshots/top-sql.jpg) |
 
-| 락 사슬 | 세션 상세 |
+| Lock Chain | 세션 상세 |
 |---|---|
-| ![락 사슬](screenshots/locks.jpg) | ![세션 상세](screenshots/session-detail.jpg) |
+| ![Lock Chain](screenshots/locks.jpg) | ![세션 상세](screenshots/session-detail.jpg) |
 
 | Health Check | 데드락 |
 |---|---|
@@ -46,7 +46,7 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   디스크 처리량과 지연 · 대기 · 추이 그래프 · 세션 표. 초당 값은 늘 직전 주기 구간 값입니다(서버 시작 이후 누적이 아님).
   SQL Server CPU 는 **SQL Server 가 쓸 수 있는 CPU 대비**입니다 — affinity 나 에디션 코어 제한으로 호스트 CPU 일부만 받은 서버(예: 8개 중 4개)는
   그 4개가 다 차면 100% 이고, 게이지 아래에 "4 of 8 CPUs" 와 호스트 전체 대비 값을 함께 보여 줍니다.
-- **진짜 뿌리를 찾는 락 사슬**: 트랜잭션을 연 채 쉬는 세션(`idle-tx`)까지 막힘의 뿌리로 잡습니다 — 실행 중인 요청만 보는 방식이 놓치는 흔한 원인입니다.
+- **진짜 뿌리를 찾는 Lock Chain**: 트랜잭션을 연 채 쉬는 세션(`idle-tx`)까지 막힘의 뿌리로 잡습니다 — 실행 중인 요청만 보는 방식이 놓치는 흔한 원인입니다.
   `F5` 는 막는 세션과 막힌 세션을 함께 보여 줍니다.
 - **세션 상세**(`Enter`): 문장 · 배치 전문, 지금까지의 실제 행 수가 든 라이브 실행 계획(없으면 캐시된 계획), 락.
   `Ctrl+K` 로 KILL(로그인 시각까지 다시 확인해 번호가 재사용된 다른 세션은 끊지 않습니다), `Ctrl+X` 로 Excel 저장 — 플랜 · 락 · 플랜에 나온 테이블의 크기 · 인덱스 · 통계까지.
@@ -56,13 +56,17 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   느려진 쿼리(앞 7일보다 2배 이상), 문장 검색, 쿼리별 플랜 이력과 플랜 강제 스크립트(보여 주기만 하고 실행하지 않음).
 - **Health Check**(`G`): 10개 범주(서버 설정 · 성능 · DB 설정 · 인덱스 · 통계 · tempdb · 파일 · 백업 · Agent 작업 · 로그)를
   점수 · 등급 · 먼저 고칠 것으로 보여 주고 Excel 로 저장. MAXDOP 은 NUMA 노드 기준, PLE 는 버퍼 풀 크기 기준, 백업은 서버 시계 기준으로 판정합니다.
-- **임계값 알림** 12종: CPU(SQL Server 가 쓸 수 있는 CPU 대비) · 락 사슬 · 막힌 요청 · idle in transaction · 긴 요청 · 버퍼 캐시 적중률 · PLE · Memory Grants Pending ·
+- **임계값 알림** 12종: CPU(SQL Server 가 쓸 수 있는 CPU 대비) · Lock Chain · 막힌 요청 · idle in transaction · 긴 요청 · 버퍼 캐시 적중률 · PLE · Memory Grants Pending ·
   tempdb 사용률 · 디스크 읽기 / 쓰기 지연 · 데드락.
 - **History**: `L` 로 로컬 SQLite 에 모니터링 데이터를 쌓고, `H` 로 지난 흐름을 되짚습니다.
   - 구간은 1시간 / 6시간 / 24시간 / 1주 / 1개월 / 전체, 지표는 20가지입니다.
   - 오래된 기록은 자동으로 지웁니다(기본 지표 30일 · 세션 7일, `sqltune.json` 에서 조정).
 - Excel 저장: ClosedXML 기반이라 Excel 이 없어도 xlsx 파일이 저장됩니다.
 - 테마 12종(밝은 6 · 어두운 6). 접속이 끊기면 스스로 다시 붙습니다.
+- **2.1 에서 더한 것**: Jobs 팝업(`J`) — SQL Server Agent 의 지금 도는 잡 · 실패한 단계와 오류 글 · 잡마다 마지막 결과와 다음 실행. Windows 인증(접속 창의 체크박스 또는 `"windowsAuth": true`). Top SQL 에 쿼리별 주된 대기.
+- **찾기**: `/` 로 세션을 글자로 거릅니다.
+- **알림이 켜지는 순간**: 막힘 트리 · 문장(`.txt`)이나 데드락 그래프(`.xdl`)를 `captures\` 아래에 남기고, 위험 알림은 창이 앞에 없을 때 작업 표시줄 깜빡임 · Windows 알림으로 알려 줍니다.
+- History 에서 한 시점을 누르면 그때 기록된 세션이 나옵니다.
 - `Ctrl+B` 로 DB 단위 팝업이 볼 데이터베이스를 바꿉니다. `F1` 을 누르면 단축키 도움말이 나옵니다.
 
 자세한 사용법은 첨부한 `sqltune.html`(스크린샷이 든 매뉴얼)을 참고해 주세요. 사용상 제한 없습니다.

@@ -73,6 +73,13 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   - Old rows are trimmed automatically (30 days of metrics, 7 days of sessions by default; configurable).
 - **Excel export** — built on ClosedXML, so the `.xlsx` is written even without Excel installed.
 - 12 themes (6 light, 6 dark). Reconnects by itself when the connection drops.
+- **New in 2.1** — Jobs popup (`J`): SQL Server Agent jobs running now, failed steps with their error text, last result
+  and next run of every job. Windows authentication (a checkbox in the connection dialog, or `"windowsAuth": true`).
+  Top SQL shows the main wait of each query.
+- **Find** — `/` filters the session list by text.
+- **When an alert fires** — the blocking tree and statements (`.txt`) or the deadlock graph (`.xdl`) are saved under `captures\`,
+  and a Critical alert flashes the taskbar and shows a Windows notification when the window is not in front.
+- In History, click a point in time to see the sessions that were logged at that moment.
 - `Ctrl+B` switches the database used by the database-level panels. Press `F1` for the keyboard shortcuts.
 
 The bundled `sqltune.html` is the full manual with screenshots (in Korean).
