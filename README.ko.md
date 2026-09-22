@@ -67,6 +67,7 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 - **찾기**: `/` 로 세션을 글자로 거릅니다.
 - **알림이 켜지는 순간**: 막힘 트리 · 문장(`.txt`)이나 데드락 그래프(`.xdl`)를 `captures\` 아래에 남기고, 위험 알림은 창이 앞에 없을 때 작업 표시줄 깜빡임 · Windows 알림으로 알려 줍니다.
 - History 에서 한 시점을 누르면 그때 기록된 세션이 나옵니다.
+- **Most read tables**(Indexes, `X`): 디스크 읽기(PAGEIOLATCH)를 기다린 테이블 — 전체 대비 비율과 `Δ delta`. **Scan buffer pool** 은 지금 메모리를 차지한 테이블. 두 스캔 버튼은 경고를 먼저 띄우고, 제한 시간은 `indexes.fragmentationTimeoutSec` · `indexes.bufferPoolTimeoutSec`.
 - `Ctrl+B` 로 DB 단위 팝업이 볼 데이터베이스를 바꿉니다. `F1` 을 누르면 단축키 도움말이 나옵니다.
 
 자세한 사용법은 첨부한 `sqltune.html`(스크린샷이 든 매뉴얼)을 참고해 주세요. 사용상 제한 없습니다.
@@ -162,7 +163,7 @@ zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 `sqltune.json` 이 
 - `password` 는 평문으로 적으면 첫 실행 때 자동 암호화되어 `ENC1:...` 로 저장됩니다.
 - 이름 있는 인스턴스는 `server` 에 `HOST\\INSTANCE` 로 쓰고 `port` 는 비우거나 `1433` 으로 둡니다(SQL Browser 로 포트를 찾습니다).
 - `database` 는 DB 단위 팝업이 처음 볼 DB 이고 `Ctrl+B` 로 바꿉니다. 세션 목록은 늘 서버 전체입니다.
-- `encrypt`: `mandatory`(기본) / `optional` / `strict`. `trustServerCertificate` 는 자체 서명 인증서를 받아들일지입니다.
+- `encrypt`: `mandatory`(기본) / `optional` / `strict`. `trustServerCertificate` 는 자체 서명 인증서를 받아들일지, `indexes.fragmentationTimeoutSec`(300) · `indexes.bufferPoolTimeoutSec`(30)은 Indexes 의 두 스캔 버튼 제한 시간(5 ~ 3600초)입니다.
 - `alerts`, `logRetention` 같은 절은 적지 않아도 됩니다. zip 안의 `sqltune_sample_kr.json` 에 모든 설정의 설명이 있습니다.
 
 ## 사용 조건

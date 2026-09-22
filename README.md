@@ -80,6 +80,9 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 - **When an alert fires** — the blocking tree and statements (`.txt`) or the deadlock graph (`.xdl`) are saved under `captures\`,
   and a Critical alert flashes the taskbar and shows a Windows notification when the window is not in front.
 - In History, click a point in time to see the sessions that were logged at that moment.
+- **Most read tables** (Indexes, `X`) — which tables waited for disk reads (PAGEIOLATCH), with their share of all I/O
+  wait time and a `Δ delta` mode; **Scan buffer pool** shows what sits in memory right now, by table. Both scan buttons
+  warn before they run; their time limits are `indexes.fragmentationTimeoutSec` / `indexes.bufferPoolTimeoutSec`.
 - `Ctrl+B` switches the database used by the database-level panels. Press `F1` for the keyboard shortcuts.
 
 The bundled `sqltune.html` is the full manual with screenshots (in Korean).
@@ -179,7 +182,7 @@ connection dialog fill it in:
 - Write `password` in plain text — it is encrypted on the first run and stored back as `ENC1:...`.
 - A named instance goes into `server` as `HOST\\INSTANCE`, with `port` empty or `1433` (found through SQL Browser).
 - `database` is where the database-level panels start; `Ctrl+B` switches it. The session list is always server-wide.
-- `encrypt`: `mandatory` (default) / `optional` / `strict`. `trustServerCertificate` accepts a self-signed certificate.
+- `encrypt`: `mandatory` (default) / `optional` / `strict`. `trustServerCertificate` accepts a self-signed certificate. `indexes.fragmentationTimeoutSec` (300) / `indexes.bufferPoolTimeoutSec` (30) limit the two scan buttons in Indexes, 5–3600 s.
 - Sections such as `alerts` and `logRetention` are optional. `sqltune_sample_en.json` in the zip
   documents every setting.
 
