@@ -37,7 +37,8 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 
 - 압축을 풀고 폴더째 둔 뒤 `sqltune.exe` 를 실행하면 됩니다 (Single File Publishing).
 - .NET 설치 불필요 — 런타임이 실행 파일에 포함되어 있습니다.
-- 설정은 같은 폴더의 `sqltune.json` 하나입니다. 파일을 고쳐도 되고(아래 예시), 그냥 실행해도 됩니다 —
+- 설정은 같은 폴더의 접속 파일입니다. zip 에 `sqltuneDB1.json` · `sqltuneDB2.json` 두 개가 들어 있습니다 — 서버 하나에 파일 하나.
+  서버가 하나면 한 파일만 두고 나머지는 지우세요. 파일을 고쳐도 되고(아래 예시), 그냥 실행해도 됩니다 —
   들어 있는 값으로 붙지 못하면 그 값이 채워진 접속 창이 뜹니다. 실제로 접속된 뒤에 입력한 값을 저장합니다(비밀번호는 암호화해서 저장).
 
 ## 주요 기능
@@ -60,15 +61,24 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   tempdb 사용률 · 디스크 읽기 / 쓰기 지연 · 데드락.
 - **History**: `L` 로 로컬 SQLite 에 모니터링 데이터를 쌓고, `H` 로 지난 흐름을 되짚습니다.
   - 구간은 1시간 / 6시간 / 24시간 / 1주 / 1개월 / 전체, 지표는 20가지입니다.
-  - 오래된 기록은 자동으로 지웁니다(기본 지표 30일 · 세션 7일, `sqltune.json` 에서 조정).
+  - 오래된 기록은 자동으로 지웁니다(기본 지표 30일 · 세션 7일, `O` 설정 창에서 조정).
 - Excel 저장: ClosedXML 기반이라 Excel 이 없어도 xlsx 파일이 저장됩니다.
-- 테마 12종(밝은 6 · 어두운 6). 접속이 끊기면 스스로 다시 붙습니다.
+- **테마 12종**: 밝은 6 · 어두운 6, 기본은 GitHub Light. 상단 바에서 고릅니다. 접속이 끊기면 스스로 다시 붙습니다.
 - **2.1 에서 더한 것**: Jobs 팝업(`J`) — SQL Server Agent 의 지금 도는 잡 · 실패한 단계와 오류 글 · 잡마다 마지막 결과와 다음 실행. Windows 인증(접속 창의 체크박스 또는 `"windowsAuth": true`). Top SQL 에 쿼리별 주된 대기.
 - **찾기**: `/` 로 세션을 글자로 거릅니다.
 - **알림이 켜지는 순간**: 막힘 트리 · 문장(`.txt`)이나 데드락 그래프(`.xdl`)를 `captures\` 아래에 남기고, 위험 알림은 창이 앞에 없을 때 작업 표시줄 깜빡임 · Windows 알림으로 알려 줍니다.
 - History 에서 한 시점을 누르면 그때 기록된 세션이 나옵니다.
 - **Most read tables**(Indexes, `X`): 디스크 읽기(PAGEIOLATCH)를 기다린 테이블 — 전체 대비 비율과 `Δ delta`. **Scan buffer pool** 은 지금 메모리를 차지한 테이블. 두 스캔 버튼은 경고를 먼저 띄우고, 제한 시간은 `indexes.fragmentationTimeoutSec` · `indexes.bufferPoolTimeoutSec`.
-- `Ctrl+B` 로 DB 단위 팝업이 볼 데이터베이스를 바꿉니다. `F1` 을 누르면 단축키 도움말이 나옵니다.
+- **System Stored Procedures**: `F1` 의 두 번째 탭에서 서버의 시스템 저장 프로시저(master · msdb — SQL Server 2025 에서 1,600개 넘게)를
+  글자를 칠 때마다 찾습니다. 목록과 매개변수는 접속한 서버에서 읽어 버전과 늘 맞고, 700개쯤에 한 줄 설명, 자주 쓰는 169개에 복사해 쓰는 샘플이 있습니다 —
+  프로그램에 들어 있어 인터넷이 필요 없습니다. sqltune 은 실행하지 않습니다.
+- **DBCC 명령**: 같은 탭에 DBCC 명령 35개가 있습니다(`dbcc` 로 찾기 — Microsoft 문서 목록의 32개 전부를 문서의 네 갈래대로, 그리고 `MEMORYSTATUS` · `LOGINFO` · `PAGE`) — `SQLPERF(LOGSPACE)` · `OPENTRAN` · `INPUTBUFFER` · `SHOW_STATISTICS` · `CHECKDB` · `CHECKIDENT` ·
+  `SHRINKFILE` · `FREEPROCCACHE` · `TRACEON` … 인자 · 필요한 권한 · 복사해 쓰는 샘플과 함께, 폐기 예정 · 문서 없음도 표시합니다.
+- **서버마다 설정 파일 하나**: exe 옆에 둘 이상이면 시작할 때 어느 것으로 붙을지 고르는 창이 뜹니다. 손으로 고치다 깨진 파일은 몇째 줄 몇째 글자가 틀렸는지와 함께 빨갛게 보입니다.
+- **설정 창**: `O` 로 수집 주기(3~60초, 기본 5초) · 로그 보관 · Indexes 스캔 제한 시간 · Excel · 알림 임계값 · `L` 로깅이 남길 세션을 화면에서 고칩니다.
+  값을 검사한 뒤 지금 쓰는 설정 파일에 저장하고 바로 적용합니다. 접속 정보는 시작 접속 창에서만 바꿉니다.
+- **시작할 때 서버가 응답하지 않으면**: 30초 동안 빈 화면 대신, 1초 뒤 누구에게 몇 초째 붙는 중인지 보이는 작은 창이 뜨고 Cancel 로 접속 정보를 고칠 수 있습니다.
+- `Ctrl+B` 로 DB 단위 팝업이 볼 데이터베이스를 바꿉니다. `F1` 을 누르면 단축키 도움말이, 한 번 더 누르면 System Procedures & DBCC 탭이 나옵니다.
 
 자세한 사용법은 첨부한 `sqltune.html`(스크린샷이 든 매뉴얼)을 참고해 주세요. 사용상 제한 없습니다.
 
@@ -138,10 +148,16 @@ GRANT EXECUTE ON dbo.agent_datetime TO sqltune;
 - .NET 11.0 (x64), C# 15, Blazor Hybrid
 - 패키지: Microsoft.Data.SqlClient · Microsoft.Data.Sqlite · ClosedXML · Microsoft.Web.WebView2 · Microsoft.AspNetCore.Components.WebView.WindowsForms
 - 실행 파일에 묶인 위 구성 요소들의 저작권 고지 · 라이선스 전문: [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) (zip 안에도 들어 있습니다)
+- F1 의 시스템 저장 프로시저 한 줄 설명은 Microsoft SQL Server 문서에서 옮겼습니다
+  ([MicrosoftDocs/sql-docs](https://github.com/MicrosoftDocs/sql-docs), © Microsoft, CC BY 4.0) — 자세한 내용은 THIRD-PARTY-NOTICES.txt.
 
-## sqltune.json 예시
+## 접속 파일 예시 (`sqltuneDB1.json` …)
 
-zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 `sqltune.json` 이 들어 있습니다. 고쳐서 쓰거나, 접속 창에 맡기면 됩니다:
+zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 틀이 `sqltuneDB1.json` · `sqltuneDB2.json` 두 이름으로 들어 있습니다 —
+서버마다 파일 하나, 이름은 자유입니다(`prod.json` · `dev.json` …). `sqltune.exe` 옆에 둘 이상이면 시작할 때 고르는 창이 뜨고
+(목록에는 `login@server,port/database` 만 — 비밀번호는 보이지 않습니다), 하나뿐이면 바로 붙습니다.
+고른 파일이 그 실행의 설정이 되어 암호화된 비밀번호 · 창 위치 · 테마가 그 파일에 저장됩니다.
+같은 폴더의 sqltune 은 한 번에 하나만 뜨니, 여러 서버를 동시에 보려면 폴더를 나누세요. 파일을 고쳐서 쓰거나, 접속 창에 맡기면 됩니다:
 
 ```json
 {
@@ -164,7 +180,9 @@ zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 `sqltune.json` 이 
 - 이름 있는 인스턴스는 `server` 에 `HOST\\INSTANCE` 로 쓰고 `port` 는 비우거나 `1433` 으로 둡니다(SQL Browser 로 포트를 찾습니다).
 - `database` 는 DB 단위 팝업이 처음 볼 DB 이고 `Ctrl+B` 로 바꿉니다. 세션 목록은 늘 서버 전체입니다.
 - `encrypt`: `mandatory`(기본) / `optional` / `strict`. `trustServerCertificate` 는 자체 서명 인증서를 받아들일지, `indexes.fragmentationTimeoutSec`(300) · `indexes.bufferPoolTimeoutSec`(30)은 Indexes 의 두 스캔 버튼 제한 시간(5 ~ 3600초)입니다.
-- `alerts`, `logRetention` 같은 절은 적지 않아도 됩니다. zip 안의 `sqltune_sample_kr.json` 에 모든 설정의 설명이 있습니다.
+- `interval` 은 수집 주기(초)입니다. 3~60, 적지 않으면 5.
+- `alerts`, `logRetention`, `logFilter`(`L` 로깅이 남길 세션 — 2.2 까지는 `mssql_monitor_filter.json` 이었고 그 규칙은 옮겨 적습니다) 같은 절은 적지 않아도 됩니다.
+  sqltune 이 파일을 쓸 때 기본값으로 채워 넣고, `O` 로 화면에서 고칠 수 있습니다. zip 안의 `sqltune_sample_kr.json` 에 모든 설정의 설명이 있습니다.
 
 ## 사용 조건
 

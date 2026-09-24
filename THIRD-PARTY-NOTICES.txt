@@ -32,6 +32,8 @@ SQLitePCLRaw (core, provider, bundle)        Apache-2.0     Copyright 2014-2025 
 SixLabors.Fonts 1.0.0                        Apache-2.0     Copyright (c) Six Labors
 Microsoft.Web.WebView2 (SDK / loader)        BSD-3-Clause   Copyright (C) Microsoft Corporation
 SQLite (e_sqlite3 native library)            Public Domain  https://sqlite.org/copyright.html
+Microsoft SQL Server documentation           CC BY 4.0      (c) Microsoft Corporation
+  (one-line descriptions in F1, see the last section)
 
 Notes
 - The .NET runtime is included because sqltune is published self-contained.
@@ -359,3 +361,20 @@ Apache License 2.0 — SQLitePCLRaw, SixLabors.Fonts
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+==============================================================================
+Microsoft SQL Server documentation — one-line descriptions (CC BY 4.0)
+==============================================================================
+
+The one-line descriptions of system stored procedures shown in F1 > System Stored
+Procedures (about 750 of them) are the first sentences of pages of the Microsoft SQL
+Server documentation:
+
+  Source:    https://github.com/MicrosoftDocs/sql-docs
+             docs/relational-databases/system-stored-procedures (commit e68830c, 2026-09-23)
+  Copyright: (c) Microsoft Corporation
+  License:   Creative Commons Attribution 4.0 International (CC BY 4.0)
+             https://creativecommons.org/licenses/by/4.0/
+  Changes:   only the first sentence of each page's description is kept, and markdown
+             and include tokens are removed. The 169 descriptions and samples written
+             for sqltune itself are not taken from that documentation.

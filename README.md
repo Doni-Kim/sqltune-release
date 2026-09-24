@@ -38,9 +38,10 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 
 - Unzip, keep the folder together, and run `sqltune.exe` (single-file publish).
 - No .NET install needed — the runtime is inside the executable.
-- The only thing to set up is `sqltune.json` next to the executable: either edit it (see below), or just run
-  `sqltune.exe` — when the bundled values do not connect, a connection dialog opens with those values filled in.
-  Once the connection has succeeded, what you typed is saved back (the password is stored encrypted).
+- The only thing to set up is a connection file next to the executable. The zip ships two, `sqltuneDB1.json` and
+  `sqltuneDB2.json` — one file per server. Watching a single server? Keep one and delete the other.
+  Either edit it (see below), or just run `sqltune.exe` — when the values do not connect, a connection dialog opens with
+  them filled in. Once the connection has succeeded, what you typed is saved back (the password is stored encrypted).
 
 ## What it does
 
@@ -70,9 +71,9 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   with your own thresholds.
 - **History** — press `L` to log every sample into a local SQLite file, then `H` to look back.
   - Ranges: 1 hour / 6 hours / 24 hours / 1 week / 1 month / all. 20 metrics.
-  - Old rows are trimmed automatically (30 days of metrics, 7 days of sessions by default; configurable).
+  - Old rows are trimmed automatically (30 days of metrics, 7 days of sessions by default; change it with `O`).
 - **Excel export** — built on ClosedXML, so the `.xlsx` is written even without Excel installed.
-- 12 themes (6 light, 6 dark). Reconnects by itself when the connection drops.
+- **12 themes** — six light, six dark, GitHub Light by default; pick one from the top bar. Reconnects by itself when the connection drops.
 - **New in 2.1** — Jobs popup (`J`): SQL Server Agent jobs running now, failed steps with their error text, last result
   and next run of every job. Windows authentication (a checkbox in the connection dialog, or `"windowsAuth": true`).
   Top SQL shows the main wait of each query.
@@ -83,7 +84,22 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 - **Most read tables** (Indexes, `X`) — which tables waited for disk reads (PAGEIOLATCH), with their share of all I/O
   wait time and a `Δ delta` mode; **Scan buffer pool** shows what sits in memory right now, by table. Both scan buttons
   warn before they run; their time limits are `indexes.fragmentationTimeoutSec` / `indexes.bufferPoolTimeoutSec`.
-- `Ctrl+B` switches the database used by the database-level panels. Press `F1` for the keyboard shortcuts.
+- **System stored procedures** — the second `F1` tab finds the server's system stored procedures (master and msdb —
+  1,600+ on SQL Server 2025) as you type, with their parameters read from the server, so the list always matches its
+  version. About 700 have a one-line description and 169 of the most used a sample to copy — built in, so no internet is
+  needed. sqltune never runs them.
+- **DBCC commands** — the same tab lists 35 DBCC commands (type `dbcc`) — all 32 in Microsoft's reference, in its four groups, plus `MEMORYSTATUS`, `LOGINFO` and `PAGE`: `SQLPERF(LOGSPACE)`, `OPENTRAN`, `INPUTBUFFER`,
+  `SHOW_STATISTICS`, `CHECKDB`, `CHECKIDENT`, `SHRINKFILE`, `FREEPROCCACHE`, `TRACEON` … with arguments, the permission
+  each needs and a sample to copy; deprecated and undocumented ones are marked.
+- **One settings file per server** — with two or more next to the executable, sqltune asks which one to use at startup.
+  A file broken by a hand edit is listed in red with the line and position of the error.
+- **Settings screen** — `O` changes the collection interval (3–60 s, 5 by default), log retention, the Indexes scan time
+  limits, Excel, alert thresholds and which sessions `L` logs. Values are checked, saved to the settings file in use and
+  applied at once; the connection itself is changed only in the startup window.
+- **Server not answering at startup** — after a second a small window shows whom sqltune is connecting to and for how
+  long, with Cancel to fix the connection, instead of an empty screen for 30 seconds.
+- `Ctrl+B` switches the database used by the database-level panels. Press `F1` for the keyboard shortcuts, and again for
+  the System Procedures & DBCC tab.
 
 The bundled `sqltune.html` is the full manual with screenshots (in Korean).
 
@@ -156,11 +172,17 @@ Errors are written to `sqltune.log` next to the executable (the file only appear
 - .NET 11.0 (x64), C# 15, Blazor Hybrid
 - Microsoft.Data.SqlClient · Microsoft.Data.Sqlite · ClosedXML · Microsoft.Web.WebView2 · Microsoft.AspNetCore.Components.WebView.WindowsForms
 - Copyright notices and license texts of these bundled components: [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) (also inside the zip)
+- The one-line descriptions of system stored procedures in F1 come from the Microsoft SQL Server documentation
+  ([MicrosoftDocs/sql-docs](https://github.com/MicrosoftDocs/sql-docs), © Microsoft, CC BY 4.0) — details in THIRD-PARTY-NOTICES.txt.
 
-## sqltune.json
+## Connection files (`sqltuneDB1.json` …)
 
-The zip ships a small `sqltune.json` with default values (`127.0.0.1:1433`, `sa`). Edit it, or let the
-connection dialog fill it in:
+The zip ships the same small template twice, as `sqltuneDB1.json` and `sqltuneDB2.json` (`127.0.0.1:1433`, `sa`) —
+one file per server, and any name works (`prod.json`, `dev.json` …). With two or more next to `sqltune.exe`, sqltune asks
+which one to use at startup — the list shows `login@server,port/database`, never the password. With just one, it connects
+straight away. The chosen file is that run's settings: the encrypted password, window position and theme are saved to it.
+Only one sqltune runs per folder; to watch several servers at the same time, use one folder per server.
+Edit a file, or let the connection dialog fill it in:
 
 ```json
 {
@@ -183,8 +205,10 @@ connection dialog fill it in:
 - A named instance goes into `server` as `HOST\\INSTANCE`, with `port` empty or `1433` (found through SQL Browser).
 - `database` is where the database-level panels start; `Ctrl+B` switches it. The session list is always server-wide.
 - `encrypt`: `mandatory` (default) / `optional` / `strict`. `trustServerCertificate` accepts a self-signed certificate. `indexes.fragmentationTimeoutSec` (300) / `indexes.bufferPoolTimeoutSec` (30) limit the two scan buttons in Indexes, 5–3600 s.
-- Sections such as `alerts` and `logRetention` are optional. `sqltune_sample_en.json` in the zip
-  documents every setting.
+- `interval` is the collection interval in seconds, 3–60 (5 when left out).
+- Sections such as `alerts`, `logRetention` and `logFilter` (which sessions `L` logs — until 2.2 this was
+  `mssql_monitor_filter.json`, whose rules are carried over) are optional. sqltune fills them in with defaults when it
+  writes the file, and `O` edits them on screen. `sqltune_sample_en.json` in the zip documents every setting.
 
 ## Terms
 
