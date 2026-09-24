@@ -54,15 +54,17 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   (`idle-tx`), the usual root blocker that request-only views miss. `F5` shows blockers together with the
   sessions they block.
 - **Session detail** (`Enter`) — full statement and batch, the live execution plan with actual row counts so far
-  (or the cached plan), locks held. `Ctrl+K` kills the session (it checks the login time first, so a reused
-  session number is never killed by mistake); `Ctrl+X` exports the session to Excel — plan, locks, and the size,
-  indexes and statistics of the tables in its plan.
+  (or the cached plan) — **drawn like SSMS** (boxes and arrows, the same operator properties when you point at a box) or as text — and locks held. `Ctrl+K` kills the session (it checks the login time first, so a reused
+  session number is never killed by mistake); `Ctrl+X` exports the session to Excel — grouped sheets with the plan picture and
+  an operator table (readable without another tool, plus a `.sqlplan` file), locks, and the size, indexes and statistics of the tables in its plan.
 - **Panels** — Server (`I`), Connections (`C`), Locks (`A`), Disk (`D`), Waits (`W`),
   Deadlocks (`E`, from `system_health`, the latest one spelled out), Statistics (`U`, with an UPDATE STATISTICS
   script), Indexes (`X`: missing with CREATE, unused with DROP, duplicate and overlapping, fragmentation on demand).
 - **Top SQL** (`T`) — from Query Store: by duration, CPU, reads, executions or a combined score, over 1 h / 24 h /
   7 days; statements with several plans; regressed queries (at least twice as slow as the week before);
-  text search; plan history per query with a force-plan script (shown, never run).
+  text search; click a column header to re-sort what is on screen; plan history per query with a force-plan script (shown, never run).
+  The detail draws each plan and has **Object Info** — every table the plan reads with its columns, indexes and statistics,
+  the columns in its predicates marked and `CONVERT_IMPLICIT` on a column flagged (read from Query Store, nothing is run again).
 - **Health Check** (`G`) — 10 categories (server configuration, performance, database settings, indexes,
   statistics, tempdb, files, backups, Agent jobs, log) with a score, a grade and what to fix first; Excel export.
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.
