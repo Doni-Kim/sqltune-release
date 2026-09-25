@@ -28,6 +28,9 @@ ClosedXML                                    MIT            Copyright (c) 2016 C
 ClosedXML.Parser                             MIT            Copyright (c) 2023, Jan Havlíček
 ExcelNumberFormat                            MIT            Copyright (c) 2017 andersnm
 RBush                                        MIT            Copyright (c) 2017-2024 Turning Code, LLC (and others)
+Hogimn.Sql.Formatter                         MIT            Copyright (c) 2022 Hoki Min
+  (C# port of vertical-blank/sql-formatter, itself a port of the MIT-licensed
+  JavaScript sql-formatter)
 SQLitePCLRaw (core, provider, bundle)        Apache-2.0     Copyright 2014-2025 SourceGear, LLC
 SixLabors.Fonts 1.0.0                        Apache-2.0     Copyright (c) Six Labors
 Microsoft.Web.WebView2 (SDK / loader)        BSD-3-Clause   Copyright (C) Microsoft Corporation
