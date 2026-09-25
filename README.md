@@ -65,6 +65,7 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   text search; click a column header to re-sort what is on screen; plan history per query with a force-plan script (shown, never run).
   The detail draws each plan and has **Object Info** — every table the plan reads with its columns, indexes and statistics,
   the columns in its predicates marked and `CONVERT_IMPLICIT` on a column flagged (read from Query Store, nothing is run again).
+  `Ctrl+F` (Find SQL) opens that detail straight from a Query Store `query_id` or the `query_hash` shown in the session detail.
 - **Health Check** (`G`) — 10 categories (server configuration, performance, database settings, indexes,
   statistics, tempdb, files, backups, Agent jobs, log) with a score, a grade and what to fix first; Excel export.
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.
