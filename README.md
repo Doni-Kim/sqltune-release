@@ -66,7 +66,8 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   The detail draws each plan and has **Object Info** — every table the plan reads with its columns, indexes and statistics,
   the columns in its predicates marked and `CONVERT_IMPLICIT` on a column flagged (read from Query Store, nothing is run again).
   `Ctrl+F` (Find SQL) opens that detail straight from a Query Store `query_id` or the `query_hash` shown in the session detail.
-- **SQL tab** — the statement is the first tab of the detail (`[SQL] [Graphical] [Text]`, plus `[Object Info]` in Top SQL), and a one-line statement is laid out by clause. Only spaces and line breaks outside quotes change, never a character; `[Beautify]` switches to the original and back.
+- **SQL tab** — the statement is the first tab of the detail (`[SQL] [Statistics] [Graphical] [Text] [Object Info]`), and a one-line statement is laid out by clause. Only spaces and line breaks outside quotes change, never a character; `[Beautify]` switches to the original and back.
+- **One SQL window** (2.5) — the session detail, Top SQL and Find SQL open the same window: a summary with the sessions running the statement now (and which plan each uses), `[Statistics]` with the Query Store plan history and waits — or the plan cache when Query Store has no record — and `[Excel]` in each. From a session, Query Store is looked up in the session's own database.
 - **Health Check** (`G`) — 10 categories (server configuration, performance, database settings, indexes,
   statistics, tempdb, files, backups, Agent jobs, log) with a score, a grade and what to fix first; Excel export.
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.

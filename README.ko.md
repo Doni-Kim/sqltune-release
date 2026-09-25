@@ -57,7 +57,8 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   느려진 쿼리(앞 7일보다 2배 이상), 문장 검색, 머리글을 눌러 화면에서 다시 정렬, 쿼리별 플랜 이력과 플랜 강제 스크립트(보여 주기만 하고 실행하지 않음).
   상세에서 플랜을 그림으로 보고, **Object Info** 로 플랜이 읽는 테이블마다 컬럼 · 인덱스 · 통계를 봅니다 — 조건에 나온 컬럼 표시, 컬럼의 `CONVERT_IMPLICIT` 경고(Query Store 에서 읽을 뿐 다시 실행하지 않음).
   `Ctrl+F`(Find SQL) 로 Query Store 의 `query_id` 나 세션 상세의 `query_hash` 를 넣어 그 상세를 바로 엽니다.
-- **SQL 탭**: 상세의 첫 탭(`[SQL] [Graphical] [Text]`, Top SQL 은 `[Object Info]` 까지)이 문장이고, 한 줄 문장은 절마다 줄을 바꿔 보여 줍니다. 따옴표 밖의 공백 · 줄바꿈만 바뀌고 글자는 바뀌지 않으며, `[Beautify]` 로 원문과 오갑니다.
+- **SQL 탭**: 상세의 첫 탭(`[SQL] [Statistics] [Graphical] [Text] [Object Info]`)이 문장이고, 한 줄 문장은 절마다 줄을 바꿔 보여 줍니다. 따옴표 밖의 공백 · 줄바꿈만 바뀌고 글자는 바뀌지 않으며, `[Beautify]` 로 원문과 오갑니다.
+- **SQL 창 한 포맷**(2.5): 세션 상세 · Top SQL · Find SQL 이 같은 창 — 요약과 지금 이 문장을 돌리는 세션(어느 계획으로 도는지까지), Query Store 계획 이력 · 대기(기록이 없으면 plan cache)를 보는 `[Statistics]`, 창마다 `[Excel]`. 세션에서 열면 Query Store 를 세션의 DB 에서 찾습니다.
 - **Health Check**(`G`): 10개 범주(서버 설정 · 성능 · DB 설정 · 인덱스 · 통계 · tempdb · 파일 · 백업 · Agent 작업 · 로그)를
   점수 · 등급 · 먼저 고칠 것으로 보여 주고 Excel 로 저장. MAXDOP 은 NUMA 노드 기준, PLE 는 버퍼 풀 크기 기준, 백업은 서버 시계 기준으로 판정합니다.
 - **임계값 알림** 12종: CPU(SQL Server 가 쓸 수 있는 CPU 대비) · Lock Chain · 막힌 요청 · idle in transaction · 긴 요청 · 버퍼 캐시 적중률 · PLE · Memory Grants Pending ·
