@@ -45,9 +45,11 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
 
 ## What it does
 
-- **Live dashboard** — buffer cache hit ratio, SQL Server CPU, PLE, memory, memory grants pending, tempdb, batches / transactions /
-  compiles / recompiles / page splits / full scans / lock waits per second, disk throughput and latency, top waits, trend graphs, and the session list.
-  Rates always cover the last sample, not the time since the server started.
+- **Live dashboard** — two gauges (buffer cache hit ratio, SQL Server CPU), six trends (batches and transactions per second and active requests on the left;
+  waiting requests, disk bytes and tempdb bytes per second on the right), session counts by state, and eighteen Performance cells in six columns:
+  PLE / memory / memory grants pending, tempdb / version store / page splits, compiles / recompiles / worker threads, deadlocks / lock waits / errors,
+  disk reads / disk writes (with latency) / full scans, log flushes / long-open transactions / checkpoint pages — then top waits and the session list.
+  Rates always cover the last sample, not the time since the server started; a value the server did not return shows `n/a`, not 0.
   SQL Server CPU is a share of the CPUs SQL Server may use: when affinity or an edition limit gives it only some of the
   host's CPUs (say 4 of 8), 100% means all of those are busy, and the gauge also shows "4 of 8 CPUs" and the share of the whole host.
 - **Lock chains that find the real root** — including sessions that left a transaction open and went idle
@@ -73,9 +75,11 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.
 - **Alerts** — 12 rules: CPU (of the CPUs SQL Server may use), lock chains, blocked requests, idle in transaction, long requests, buffer cache hit,
   page life expectancy, memory grants pending, tempdb usage, disk read / write latency, deadlocks —
-  with your own thresholds.
+  with your own thresholds (0 turns a level off).
 - **History** — press `L` to log every sample into a local SQLite file, then `H` to look back.
-  - Ranges: 1 hour / 6 hours / 24 hours / 1 week / 1 month / all. 20 metrics.
+  - Ranges: 1 hour / 6 hours / 24 hours / 1 week / 1 month / all.
+  - Every value of the main screen can be picked — 35 metrics in four rows, one per panel. Byte values pick their unit (B/s to GB/s) per range,
+    and a value that was not recorded is left empty rather than drawn as 0.
   - Old rows are trimmed automatically (30 days of metrics, 7 days of sessions by default; change it with `O`).
 - **Excel export** — built on ClosedXML, so the `.xlsx` is written even without Excel installed.
 - **12 themes** — six light, six dark, GitHub Light by default; pick one from the top bar. Reconnects by itself when the connection drops.
@@ -151,9 +155,10 @@ GRANT EXECUTE ON dbo.agent_datetime TO sqltune;
 - `SQLAgentReaderRole` is not enough for the Agent check — it covers the Agent procedures, not the job tables.
 - When a grant is missing, sqltune says which one on the panel instead of showing an empty list.
 
-## Blank window? (WebView2)
+## WebView2 runtime
 
-If the window opens but stays blank, the WebView2 runtime is missing.
+sqltune draws its window with the Microsoft Edge WebView2 runtime. When it is missing, sqltune says so at startup and shows where to get it
+(up to 2.6 the window opened but stayed blank).
 
 - **Windows 11** — built into the OS, always present.
 - **Windows 10** — shipped through Windows Update since 2021, so it is there on most machines.
