@@ -31,6 +31,10 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 |---|---|
 | ![알림](screenshots/alerts.jpg) | ![인덱스](screenshots/indexes.jpg) |
 
+| 성능 보고서 | Query Store 힌트 |
+|---|---|
+| ![성능 보고서](screenshots/perf-report.jpg) | ![Query Store 힌트](screenshots/query-store-hints.jpg) |
+
 화면은 촬영용으로 잠깐 띄운 시험 서버(Docker)의 AdventureWorks 예제 DB 입니다.
 
 ## 설치·설정
@@ -61,7 +65,7 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   `Ctrl+F`(Find SQL) 로 Query Store 의 `query_id` 나 세션 상세의 `query_hash` 를 넣어 그 상세를 바로 엽니다.
 - **SQL 탭**: 상세의 첫 탭(`[SQL] [Statistics] [Graphical] [Text] [Object Info]`)이 문장이고, 한 줄 문장은 절마다 줄을 바꿔 보여 줍니다. 따옴표 밖의 공백 · 줄바꿈만 바뀌고 글자는 바뀌지 않으며, `[Beautify]` 로 원문과 오갑니다.
 - **SQL 창 한 포맷**(2.5): 세션 상세 · Top SQL · Find SQL 이 같은 창 — 요약과 지금 이 문장을 돌리는 세션(어느 계획으로 도는지까지), Query Store 계획 이력 · 대기(기록이 없으면 plan cache)를 보는 `[Statistics]`, 창마다 `[Excel]`. 세션에서 열면 Query Store 를 세션의 DB 에서 찾습니다.
-- **성능 보고서**(`Ctrl+R`, 2.10): DB 하나의 Query Store 로 최근 1 · 7 · 30일을 HTML · PDF 한 파일로, 영어 · 한국어 — 요약과 자동 소견 · 구간별 부하 · 대기 범주 · Top 쿼리 20 · Query Store 설정.
+- **성능 보고서**(`Ctrl+R`, 2.10): DB 하나의 Query Store 로 최근 1 · 7 · 30일을 HTML · PDF 한 파일로, 영어 · 한국어 — 요약과 자동 소견 · 구간별 부하 · 대기 범주 · Top 쿼리 20 · Query Store 설정, 그리고(2.11) 직전 같은 길이 구간과의 비교.
 - **Query Store 힌트**(2.10, SQL Server 2022 이상): `[Statistics]` 탭에 쿼리에 걸린 힌트와 `sp_query_store_set_hints` 스크립트(보여 주기만, 실행하지 않음).
 - **Health Check**(`G`): 10개 범주(서버 설정 · 성능 · DB 설정 · 인덱스 · 통계 · tempdb · 파일 · 백업 · Agent 작업 · 로그)를
   점수 · 등급 · 먼저 고칠 것으로 보여 주고 Excel 로 저장. MAXDOP 은 NUMA 노드 기준, PLE 는 버퍼 풀 크기 기준, 백업은 서버 시계 기준으로 판정합니다.
