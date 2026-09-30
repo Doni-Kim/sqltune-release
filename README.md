@@ -70,6 +70,9 @@ The screenshots show a throwaway test server (Docker) with the AdventureWorks sa
   `Ctrl+F` (Find SQL) opens that detail straight from a Query Store `query_id` or the `query_hash` shown in the session detail.
 - **SQL tab** — the statement is the first tab of the detail (`[SQL] [Statistics] [Graphical] [Text] [Object Info]`), and a one-line statement is laid out by clause. Only spaces and line breaks outside quotes change, never a character; `[Beautify]` switches to the original and back.
 - **One SQL window** (2.5) — the session detail, Top SQL and Find SQL open the same window: a summary with the sessions running the statement now (and which plan each uses), `[Statistics]` with the Query Store plan history and waits — or the plan cache when Query Store has no record — and `[Excel]` in each. From a session, Query Store is looked up in the session's own database.
+- **Performance report** (`Ctrl+R`, 2.10) — one database's Query Store for the last 1, 7 or 30 days as one HTML or PDF file, in English or Korean:
+  summary with automatic findings, load per interval, wait categories, the top 20 queries and the Query Store settings.
+- **Query Store hints** (2.10, SQL Server 2022+) — the `[Statistics]` tab shows the hints set on a query and a `sp_query_store_set_hints` script (shown, never run).
 - **Health Check** (`G`) — 10 categories (server configuration, performance, database settings, indexes,
   statistics, tempdb, files, backups, Agent jobs, log) with a score, a grade and what to fix first; Excel export.
   MAXDOP is judged per NUMA node, PLE by buffer pool size, backups by the server's own clock.
