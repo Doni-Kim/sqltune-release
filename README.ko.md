@@ -23,9 +23,9 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 |---|---|
 | ![Lock Chain](screenshots/locks.jpg) | ![세션 상세](screenshots/session-detail.jpg) |
 
-| Health Check | 데드락 |
+| 대기(Waits) | 통계(Statistics) |
 |---|---|
-| ![Health Check](screenshots/health-check.jpg) | ![데드락](screenshots/deadlocks.jpg) |
+| ![Waits](screenshots/waits.jpg) | ![Statistics](screenshots/statistics.jpg) |
 
 | 알림 | 인덱스 진단 |
 |---|---|
@@ -41,9 +41,9 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
 
 - 압축을 풀고 폴더째 둔 뒤 `sqltune.exe` 를 실행하면 됩니다 (Single File Publishing).
 - .NET 설치 불필요 — 런타임이 실행 파일에 포함되어 있습니다.
-- 설정은 같은 폴더의 접속 파일입니다. zip 에 `sqltuneDB1.json` · `sqltuneDB2.json` 두 개가 들어 있습니다 — 서버 하나에 파일 하나.
-  서버가 하나면 한 파일만 두고 나머지는 지우세요. 파일을 고쳐도 되고(아래 예시), 그냥 실행해도 됩니다 —
-  들어 있는 값으로 붙지 못하면 그 값이 채워진 접속 창이 뜹니다. 실제로 접속된 뒤에 입력한 값을 저장합니다(비밀번호는 암호화해서 저장).
+- 실행하면 접속 창이 먼저 뜹니다. **+ New** 로 서버를 더하고 서버 · 포트 · 로그인 방식 · DB 를 넣은 뒤 **Connect**.
+  접속과 설정은 실행 파일 옆 `sqltune.db` 에 저장됩니다(비밀번호는 암호화).
+- 2.x 를 쓰셨다면 `sqltune.exe` 만 덮어쓰세요 — 옆의 접속 json 을 처음 실행할 때 옮겨 옵니다(아래).
 
 ## 주요 기능
 
@@ -87,9 +87,12 @@ DMV · Query Store · 시스템 카탈로그만 읽습니다. 서버를 바꾸�
   프로그램에 들어 있어 인터넷이 필요 없습니다. sqltune 은 실행하지 않습니다.
 - **DBCC 명령**: 같은 탭에 DBCC 명령 35개가 있습니다(`dbcc` 로 찾기 — Microsoft 문서 목록의 32개 전부를 문서의 네 갈래대로, 그리고 `MEMORYSTATUS` · `LOGINFO` · `PAGE`) — `SQLPERF(LOGSPACE)` · `OPENTRAN` · `INPUTBUFFER` · `SHOW_STATISTICS` · `CHECKDB` · `CHECKIDENT` ·
   `SHRINKFILE` · `FREEPROCCACHE` · `TRACEON` … 인자 · 필요한 권한 · 복사해 쓰는 샘플과 함께, 폐기 예정 · 문서 없음도 표시합니다.
-- **서버마다 설정 파일 하나**: exe 옆에 둘 이상이면 시작할 때 어느 것으로 붙을지 고르는 창이 뜹니다. 손으로 고치다 깨진 파일은 몇째 줄 몇째 글자가 틀렸는지와 함께 빨갛게 보입니다.
+- **접속 창**(3.0): 왼쪽은 저장한 접속(마지막에 쓴 것부터), 오른쪽은 고른 접속. **Test** 는 붙어서 서버 판을 보이고 저장 없이 끊고,
+  **Connect** 는 붙은 뒤에만 저장합니다.
+- **위 줄**(3.0): 주소 앞의 점이 파랑이면 수집 중(누르면 끊음), 빨강이면 재접속 중 · 끊음(누르면 지금 다시 붙음).
+  **Connection** 은 창을 닫지 않고 다른 서버로 바꾸고, GitHub 그림은 이 페이지를 엽니다.
 - **설정 창**: `O` 로 수집 주기(3~60초, 기본 5초) · 로그 보관 · Indexes 스캔 제한 시간 · Excel · 알림 임계값 · `L` 로깅이 남길 세션을 화면에서 고칩니다.
-  값을 검사한 뒤 지금 쓰는 설정 파일에 저장하고 바로 적용합니다. 접속 정보는 시작 접속 창에서만 바꿉니다.
+  값을 검사한 뒤 지금 접속의 설정으로 저장하고(Excel 은 모든 접속 공통) 바로 적용합니다.
 - **시작할 때 서버가 응답하지 않으면**: 30초 동안 빈 화면 대신, 1초 뒤 누구에게 몇 초째 붙는 중인지 보이는 작은 창이 뜨고 Cancel 로 접속 정보를 고칠 수 있습니다.
 - `Ctrl+B` 로 DB 단위 팝업이 볼 데이터베이스를 바꿉니다. `F1` 을 누르면 단축키 도움말이, 한 번 더 누르면 System Procedures & DBCC 탭이 나옵니다.
 
@@ -165,38 +168,24 @@ sqltune 은 화면을 Microsoft Edge WebView2 런타임으로 그립니다. 런�
 - F1 의 시스템 저장 프로시저 한 줄 설명은 Microsoft SQL Server 문서에서 옮겼습니다
   ([MicrosoftDocs/sql-docs](https://github.com/MicrosoftDocs/sql-docs), © Microsoft, CC BY 4.0) — 자세한 내용은 THIRD-PARTY-NOTICES.txt.
 
-## 접속 파일 예시 (`sqltuneDB1.json` …)
+## 접속 · 설정 (`sqltune.db`, 3.0)
 
-zip 에는 기본값(`127.0.0.1:1433` · `sa`)이 든 작은 틀이 `sqltuneDB1.json` · `sqltuneDB2.json` 두 이름으로 들어 있습니다 —
-서버마다 파일 하나, 이름은 자유입니다(`prod.json` · `dev.json` …). `sqltune.exe` 옆에 둘 이상이면 시작할 때 고르는 창이 뜨고
-(목록에는 `login@server,port/database` 만 — 비밀번호는 보이지 않습니다), 하나뿐이면 바로 붙습니다.
-고른 파일이 그 실행의 설정이 되어 암호화된 비밀번호 · 창 위치 · 테마가 그 파일에 저장됩니다.
-같은 폴더의 sqltune 은 한 번에 하나만 뜨니, 여러 서버를 동시에 보려면 폴더를 나누세요. 파일을 고쳐서 쓰거나, 접속 창에 맡기면 됩니다:
+sqltune 이 남기는 것은 모두 `sqltune.exe` 옆의 `sqltune.db` 하나에 있습니다 — 접속, 접속마다의 설정(수집 주기 · 알림 · 로그 보관 ·
+Indexes 스캔 제한 시간 · 로그 필터), 창 위치 · 테마. 설정은 `O` 에서만 고치니 손으로 고치다 깨뜨릴 파일이 없습니다.
+새 판으로 바꿀 때는 `sqltune.exe` 만 덮어쓰고, `sqltune.db` 를 지우면 처음 상태로 돌아갑니다.
+암호화된 비밀번호가 들어 있으니 다른 사람에게 그대로 넘기지 마세요.
 
-```json
-{
-  "databases": [
-    {
-      "userId": "sa",
-      "password": "<password>",
-      "server": "127.0.0.1",
-      "port": "1433",
-      "database": "master",
-      "encrypt": "mandatory",
-      "trustServerCertificate": true
-    }
-  ],
-  "interval": 5
-}
-```
-
-- `password` 는 평문으로 적으면 첫 실행 때 자동 암호화되어 `ENC1:...` 로 저장됩니다.
-- 이름 있는 인스턴스는 `server` 에 `HOST\\INSTANCE` 로 쓰고 `port` 는 비우거나 `1433` 으로 둡니다(SQL Browser 로 포트를 찾습니다).
-- `database` 는 DB 단위 팝업이 처음 볼 DB 이고 `Ctrl+B` 로 바꿉니다. 세션 목록은 늘 서버 전체입니다.
-- `encrypt`: `mandatory`(기본) / `optional` / `strict`. `trustServerCertificate` 는 자체 서명 인증서를 받아들일지, `indexes.fragmentationTimeoutSec`(300) · `indexes.bufferPoolTimeoutSec`(30)은 Indexes 의 두 스캔 버튼 제한 시간(5 ~ 3600초)입니다.
-- `interval` 은 수집 주기(초)입니다. 3~60, 적지 않으면 5.
-- `alerts`, `logRetention`, `logFilter`(`L` 로깅이 남길 세션 — 2.2 까지는 `mssql_monitor_filter.json` 이었고 그 규칙은 옮겨 적습니다) 같은 절은 적지 않아도 됩니다.
-  sqltune 이 파일을 쓸 때 기본값으로 채워 넣고, `O` 로 화면에서 고칠 수 있습니다. zip 안의 `sqltune_sample_kr.json` 에 모든 설정의 설명이 있습니다.
+- 이름 있는 인스턴스는 **Server** 에 `HOST\INSTANCE` 로 적고 **Port** 는 비웁니다(SQL Browser 가 포트를 알려 줍니다).
+- **Sign in**: SQL 인증, 또는 Windows 인증 — sqltune 을 실행한 Windows 계정으로 로그인하고 비밀번호는 저장하지 않습니다.
+- **Database** 는 DB 단위 팝업이 시작할 DB 입니다(비우면 `master`). `Ctrl+B` 로 바꿉니다. 세션 목록은 늘 서버 전체입니다.
+- **Encrypt**: `mandatory`(기본) / `optional` / `strict`. **Certificate** 는 자체 서명 인증서를 받아들입니다(`strict` 는 늘 검증).
+- 볼 수 없는 서버(SQL Server 2019 미만 · Azure SQL Database · VIEW SERVER STATE 권한이 없는 로그인)는 접속 창에서 사유와 함께 막습니다.
+- 같은 폴더의 sqltune 은 한 번에 하나만 뜹니다. 서버는 위 줄의 **Connection** 으로 바꾸고, 여러 서버를 동시에 보려면 폴더를 나누세요.
+- **2.x 에서 올라오는 경우**: 옛 폴더에 `sqltune.exe` 를 덮어쓰면, 처음 실행할 때 옆의 접속 json(`sqltune.json` · `sqltuneDB1.json` · `prod.json` …)을
+  한 번 읽어 파일마다 접속 하나로 그 파일의 설정(`encrypt` · `trustServerCertificate` · `windowsAuth` 포함)과 함께 옮깁니다. 평문 비밀번호는 암호화해 넣습니다.
+  2.3 ~ 2.11 압축 파일의 틀을 채우지 않고 두었다면(비밀번호가 `<password>` 그대로) 옮기지 않습니다.
+  json 파일은 고치지도 지우지도 않습니다 — 확인한 뒤 직접 지우세요(평문 비밀번호가 적혀 있었다면 지우는 편이 안전합니다).
+  깨진 파일은 건너뛰고, 접속 창에 몇째 줄이 틀렸는지 나옵니다.
 
 ## 사용 조건
 
